@@ -9,3 +9,4 @@ dependencyResolutionManagement {
 rootProject.name = "TaxiNow"
 include ':app'
 include ':repository'
+include ':common'

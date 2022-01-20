@@ -9,5 +9,19 @@
         android:id="@+id/vehicleListFragment"
         android:name="com.hardik.taxinow.ui.fragment.VehicleListFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_vehicle_list" />
+        tools:layout="@layout/fragment_vehicle_list">
+        <action
+            android:id="@+id/action_vehicleListFragment_to_vehicleOnMapsFragment"
+            app:destination="@id/vehicleOnMapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/vehicleOnMapsFragment"
+        android:name="com.hardik.taxinow.ui.fragment.VehicleOnMapsFragment"
+        android:label="fragment_vehicle_on_maps"
+        tools:layout="@layout/fragment_vehicle_on_maps">
+        <argument
+            android:name="vehicle_list"
+            app:argType="com.hardik.repository.model.response.GetNearByVehicleListResponse"
+            app:nullable="false" />
+    </fragment>
 </navigation>

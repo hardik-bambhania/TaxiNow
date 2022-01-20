@@ -8,12 +8,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.hardik.common.model.ApiResult
 import com.hardik.taxinow.databinding.FragmentVehicleListBinding
 import com.hardik.taxinow.ui.adapter.VehicleListAdapter
 import com.hardik.taxinow.vm.VehicleListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -35,6 +37,25 @@ class VehicleListFragment : Fragment() {
 
         initUI()
         addObserver()
+        addListeners()
+    }
+
+    private fun addListeners() {
+        binding.fabMap.setOnClickListener {
+            lifecycleScope.launch {
+                val vehicles = viewModel.vehicle.last()
+                if (vehicles is ApiResult.Success) {
+                    vehicles.data?.let { vehicleList ->
+                        val direction =
+                            VehicleListFragmentDirections.actionVehicleListFragmentToVehicleOnMapsFragment(
+                                vehicleList
+                            )
+                        findNavController().navigate(direction)
+                    }
+                }
+            }
+
+        }
     }
 
     private fun addObserver() {
@@ -66,7 +87,7 @@ class VehicleListFragment : Fragment() {
     }
 
     private fun initUI() {
-        binding.recyclerViewVehicle.adapter = VehicleListAdapter(emptyList())
+        binding.recyclerViewVehicle.adapter = VehicleListAdapter(requireContext(), emptyList())
     }
 
 }

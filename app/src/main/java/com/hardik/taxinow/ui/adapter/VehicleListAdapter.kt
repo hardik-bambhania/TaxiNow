@@ -1,12 +1,19 @@
 package com.hardik.taxinow.ui.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.maps.model.LatLng
 import com.hardik.repository.model.Vehicle
 import com.hardik.taxinow.databinding.ItemVehicleBinding
+import com.hardik.taxinow.ui.model.VehicleClass
+import com.hardik.taxinow.ui.utils.getAddress
 
-class VehicleListAdapter(private var vehicleList: List<Vehicle>) :
+class VehicleListAdapter(
+    private val context: Context,
+    private var vehicleList: List<Vehicle>
+) :
     RecyclerView.Adapter<VehicleListAdapter.VehicleListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VehicleListViewHolder {
@@ -17,11 +24,16 @@ class VehicleListAdapter(private var vehicleList: List<Vehicle>) :
     override fun onBindViewHolder(holder: VehicleListViewHolder, position: Int) {
         val vehicle = vehicleList[position]
         with(holder.binding) {
-            txtVehicleId.text = vehicle.id.toString()
-            txtVehicleLocation.text = vehicle.coordinate.latitude.toString()
-                .plus(",")
-                .plus(vehicle.coordinate.longitude.toString())
+            txtVehicleId.text = "HH-${vehicle.id.toString().dropLast(2)}"
+            txtVehicleLocation.text =
+                context.getAddress(
+                    LatLng(
+                        vehicle.coordinate.latitude,
+                        vehicle.coordinate.longitude
+                    )
+                )
             chipVehicleType.text = vehicle.fleetType.name
+            imgVehicleClass.setImageResource(VehicleClass.values().random().icon)
         }
     }
 

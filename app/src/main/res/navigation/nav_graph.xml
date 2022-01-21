@@ -19,9 +19,14 @@
         android:name="com.hardik.taxinow.ui.fragment.VehicleOnMapsFragment"
         android:label="fragment_vehicle_on_maps"
         tools:layout="@layout/fragment_vehicle_on_maps">
+
+        <argument
+            android:name="selected_vehicle"
+            app:argType="com.hardik.taxinow.ui.model.Vehicle"
+            app:nullable="true" />
         <argument
             android:name="vehicle_list"
-            app:argType="com.hardik.repository.model.response.GetNearByVehicleListResponse"
+            app:argType="com.hardik.taxinow.ui.model.Vehicle[]"
             app:nullable="false" />
     </fragment>
 </navigation>

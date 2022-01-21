@@ -41,15 +41,28 @@ class VehicleOnMapsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         val latLngBounds = LatLngBounds.Builder()
-        args.vehicleList.poiList.forEach { vehicle ->
+        args.vehicleList.forEach { vehicle ->
             val latLng = LatLng(vehicle.coordinate.latitude, vehicle.coordinate.longitude)
+            val title = "HH-${vehicle.id.toString().dropLast(2)}"
             googleMap.addMarker(
                 MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_taxi))
-                    .position(latLng).title(vehicle.fleetType.name.plus(vehicle.id))
+                    .position(latLng).title(title).snippet(vehicle.address)
             )
             latLngBounds.include(latLng)
         }
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds.build(), 50))
+
+        args.selectedVehicle?.let { vehicle ->
+            googleMap.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(
+                        vehicle.coordinate.latitude,
+                        vehicle.coordinate.longitude
+                    ), 15F
+                )
+            )
+        } ?: kotlin.run {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds.build(), 50))
+        }
     }
 }

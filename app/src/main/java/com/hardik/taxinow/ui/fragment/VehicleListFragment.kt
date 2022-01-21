@@ -4,22 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.hardik.common.model.ApiResult
 import com.hardik.taxinow.databinding.FragmentVehicleListBinding
 import com.hardik.taxinow.ui.adapter.VehicleListAdapter
+import com.hardik.taxinow.ui.adapter.VehicleSelectListener
+import com.hardik.taxinow.ui.model.Vehicle
 import com.hardik.taxinow.vm.VehicleListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class VehicleListFragment : Fragment() {
+class VehicleListFragment : Fragment(), VehicleSelectListener {
 
     private lateinit var binding: FragmentVehicleListBinding
     private val viewModel: VehicleListViewModel by viewModels()
@@ -43,43 +42,29 @@ class VehicleListFragment : Fragment() {
     private fun addListeners() {
         binding.fabMap.setOnClickListener {
             lifecycleScope.launch {
-                val vehicles = viewModel.vehicle.last()
-                if (vehicles is ApiResult.Success) {
-                    vehicles.data?.let { vehicleList ->
-                        val direction =
-                            VehicleListFragmentDirections.actionVehicleListFragmentToVehicleOnMapsFragment(
-                                vehicleList
-                            )
-                        findNavController().navigate(direction)
-                    }
+                val vehicles = viewModel.vehicle.value
+                vehicles?.let { vehicleList ->
+                    val direction =
+                        VehicleListFragmentDirections.actionVehicleListFragmentToVehicleOnMapsFragment(
+                            null, vehicleList.toTypedArray()
+                        )
+                    findNavController().navigate(direction)
                 }
             }
-
         }
     }
 
     private fun addObserver() {
         lifecycleScope.launch {
             viewModel.vehicle.collectLatest {
-                when (it) {
-                    is ApiResult.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                    is ApiResult.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        it.data?.let { getNearByVehicleListResponse ->
-                            if (getNearByVehicleListResponse.poiList.isNotEmpty()) {
-                                binding.fabMap.show()
-                                (binding.recyclerViewVehicle.adapter as VehicleListAdapter)
-                                    .refresh(getNearByVehicleListResponse.poiList)
-                            } else {
-                                binding.fabMap.hide()
-                            }
-                        }
-                    }
-                    is ApiResult.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                binding.progressBar.visibility = View.GONE
+                it?.let { vehicleList ->
+                    if (vehicleList.isNotEmpty()) {
+                        binding.fabMap.show()
+                        (binding.recyclerViewVehicle.adapter as VehicleListAdapter)
+                            .refresh(vehicleList)
+                    } else {
+                        binding.fabMap.hide()
                     }
                 }
             }
@@ -87,7 +72,18 @@ class VehicleListFragment : Fragment() {
     }
 
     private fun initUI() {
-        binding.recyclerViewVehicle.adapter = VehicleListAdapter(requireContext(), emptyList())
+        binding.recyclerViewVehicle.adapter = VehicleListAdapter(emptyList(), this)
+    }
+
+    override fun onVehicleSelect(vehicle: Vehicle) {
+        val vehicles = viewModel.vehicle.value
+        vehicles?.let { vehicleList ->
+            val direction =
+                VehicleListFragmentDirections.actionVehicleListFragmentToVehicleOnMapsFragment(
+                    vehicle, vehicleList.toTypedArray()
+                )
+            findNavController().navigate(direction)
+        }
     }
 
 }

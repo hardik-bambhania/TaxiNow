@@ -1,6 +1,5 @@
 package com.hardik.repository
 
-import com.hardik.common.model.ApiResult
 import com.hardik.repository.model.CityBound
 import com.hardik.repository.model.response.GetNearByVehicleListResponse
 import com.hardik.repository.network.NetworkDataSource
@@ -12,9 +11,8 @@ class Repository @Inject constructor(
     private val networkDataSource: NetworkDataSource
 ) {
 
-    fun getNearByVehicle(cityBound: CityBound): Flow<ApiResult<GetNearByVehicleListResponse>> =
+    fun getNearByVehicle(cityBound: CityBound): Flow<GetNearByVehicleListResponse> =
         flow {
-            emit(ApiResult.Loading)
             val result = networkDataSource
                 .getNearByVehicles(
                     cityBound.startLatitude,
@@ -22,8 +20,7 @@ class Repository @Inject constructor(
                     cityBound.endLatitude,
                     cityBound.endLongitude
                 )
-
-            emit(ApiResult.Success(result))
+            emit(result)
         }
 
 }

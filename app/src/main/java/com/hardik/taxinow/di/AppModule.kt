@@ -1,14 +1,11 @@
 package com.hardik.taxinow.di
 
-import android.content.Context
-import android.location.Geocoder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import java.util.*
-import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 /**
  * This class is responsible to manage application dependency
@@ -17,9 +14,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    @IoDispatcher
     @Provides
-    @Singleton
-    fun providesGeocoder(@ApplicationContext context: Context): Geocoder {
-        return Geocoder(context, Locale.getDefault())
-    }
+    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 }

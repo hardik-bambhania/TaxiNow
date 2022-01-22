@@ -3,6 +3,7 @@ package com.hardik.taxinow.vm
 import android.location.Geocoder
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hardik.common.logger.AppLogger
 import com.hardik.common.model.ApiResult
 import com.hardik.repository.Repository
 import com.hardik.taxinow.mapper.Mapper
@@ -36,8 +37,10 @@ class VehicleListViewModel @Inject constructor(
     private fun getNearByVehicle() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.getNearByVehicle(Constant.CITY_HAMBURG_BOUND)
-                .catch { _vehicle.emit(ApiResult.Error(it.message)) }
-                .collectLatest {
+                .catch {
+                    AppLogger.error(VehicleListViewModel::class.java.name, it)
+                    _vehicle.emit(ApiResult.Error(it.message))
+                }.collectLatest {
                     val result = it.poiList.map { poi -> Mapper.poiToVehicle(poi, geocoder) }
                     _vehicle.emit(ApiResult.Success(result))
                 }

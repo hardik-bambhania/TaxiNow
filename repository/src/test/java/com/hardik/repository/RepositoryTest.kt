@@ -37,6 +37,7 @@ class RepositoryTest {
         //When
         val result = repository.getNearByVehicle(MockData.CITY_HAMBURG_BOUND).first()
 
+        //Then
         Assert.assertEquals(1, result.poiList.size)
         Assert.assertEquals(1212, result.poiList[0].id)
         Assert.assertEquals(123.7894f, result.poiList[0].heading)
@@ -55,6 +56,7 @@ class RepositoryTest {
         //When
         val result = repository.getNearByVehicle(MockData.CITY_HAMBURG_BOUND).first()
 
+        //Then
         Assert.assertEquals(0, result.poiList.size)
     }
 }

@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.hardik.taxinow.R
 import com.hardik.taxinow.databinding.FragmentVehicleOnMapsBinding
+import com.hardik.taxinow.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,11 +44,11 @@ class VehicleOnMapsFragment : Fragment(), OnMapReadyCallback {
         val latLngBounds = LatLngBounds.Builder()
         args.vehicleList.forEach { vehicle ->
             val latLng = LatLng(vehicle.coordinate.latitude, vehicle.coordinate.longitude)
-            val title = "HH-${vehicle.id.toString().dropLast(2)}"
+            val markerTitle = "${Constant.CITY_HAMBURG_CODE}-${vehicle.id.toString().dropLast(2)}"
             googleMap.addMarker(
                 MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_taxi))
-                    .position(latLng).title(title).snippet(vehicle.address)
+                    .position(latLng).title(markerTitle).snippet(vehicle.address)
             )
             latLngBounds.include(latLng)
         }

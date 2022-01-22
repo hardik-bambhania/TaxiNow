@@ -22,11 +22,11 @@
 
         <argument
             android:name="selected_vehicle"
-            app:argType="com.hardik.taxinow.ui.model.Vehicle"
+            app:argType="com.hardik.taxinow.model.Vehicle"
             app:nullable="true" />
         <argument
             android:name="vehicle_list"
-            app:argType="com.hardik.taxinow.ui.model.Vehicle[]"
+            app:argType="com.hardik.taxinow.model.Vehicle[]"
             app:nullable="false" />
     </fragment>
 </navigation>

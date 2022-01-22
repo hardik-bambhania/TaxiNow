@@ -10,6 +10,9 @@ import dagger.hilt.components.SingletonComponent
 import java.util.*
 import javax.inject.Singleton
 
+/**
+ * This class is responsible to manage application dependency
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {

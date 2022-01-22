@@ -4,6 +4,9 @@ import com.hardik.repository.model.response.GetNearByVehicleListResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+/**
+ * This interface is responsible to fetch data from network
+ */
 interface NetworkDataSource {
 
     @GET("/")

@@ -14,6 +14,8 @@ import com.hardik.taxinow.databinding.FragmentVehicleListBinding
 import com.hardik.taxinow.model.Vehicle
 import com.hardik.taxinow.ui.adapter.VehicleListAdapter
 import com.hardik.taxinow.ui.adapter.VehicleSelectListener
+import com.hardik.taxinow.utils.gone
+import com.hardik.taxinow.utils.visible
 import com.hardik.taxinow.vm.VehicleListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -41,32 +43,43 @@ class VehicleListFragment : Fragment(), VehicleSelectListener {
         addListeners()
     }
 
+    /**
+     * Initialize UI
+     */
+    private fun initUI() {
+        binding.recyclerViewVehicle.adapter = VehicleListAdapter(emptyList(), this)
+    }
+
+    /**
+     * Add listeners to view
+     */
     private fun addListeners() {
         binding.fabMap.setOnClickListener {
-            lifecycleScope.launch {
-                val vehicles = viewModel.vehicleList.value
-                if (vehicles is ApiResult.Success) {
-                    vehicles.data?.let { vehicleList ->
-                        val direction =
-                            VehicleListFragmentDirections.actionVehicleListFragmentToVehicleOnMapsFragment(
-                                null, vehicleList.toTypedArray()
-                            )
-                        findNavController().navigate(direction)
-                    }
+            val vehicles = viewModel.vehicleList.value
+            if (vehicles is ApiResult.Success) {
+                vehicles.data?.let { vehicleList ->
+                    val direction =
+                        VehicleListFragmentDirections.actionVehicleListFragmentToVehicleOnMapsFragment(
+                            null, vehicleList.toTypedArray()
+                        )
+                    findNavController().navigate(direction)
                 }
             }
         }
     }
 
+    /**
+     * Attach observers to observe data
+     */
     private fun addObserver() {
         lifecycleScope.launch {
             viewModel.vehicleList.collectLatest { response ->
                 when (response) {
                     is ApiResult.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
+                        binding.progressBar.visible()
                     }
                     is ApiResult.Success -> {
-                        binding.progressBar.visibility = View.GONE
+                        binding.progressBar.gone()
                         if (response.data.isNotEmpty()) {
                             binding.fabMap.show()
                             (binding.recyclerViewVehicle.adapter as VehicleListAdapter)
@@ -76,7 +89,7 @@ class VehicleListFragment : Fragment(), VehicleSelectListener {
                         }
                     }
                     is ApiResult.Error -> {
-                        binding.progressBar.visibility = View.GONE
+                        binding.progressBar.gone()
                         Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG).show()
                     }
                 }
@@ -84,10 +97,11 @@ class VehicleListFragment : Fragment(), VehicleSelectListener {
         }
     }
 
-    private fun initUI() {
-        binding.recyclerViewVehicle.adapter = VehicleListAdapter(emptyList(), this)
-    }
 
+    /**
+     * On vehicle select from vehicle list
+     * @param vehicle Vehicle details
+     */
     override fun onVehicleSelect(vehicle: Vehicle) {
         val apiResponse = viewModel.vehicleList.value
         if (apiResponse is ApiResult.Success) {

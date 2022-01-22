@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.hardik.taxinow.databinding.ItemVehicleBinding
-import com.hardik.taxinow.ui.model.Vehicle
+import com.hardik.taxinow.model.Vehicle
 
 class VehicleListAdapter(
     private var vehicleList: List<Vehicle>,

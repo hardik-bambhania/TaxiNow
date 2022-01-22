@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.hardik.common.model.ApiResult
 import com.hardik.taxinow.databinding.FragmentVehicleListBinding
+import com.hardik.taxinow.model.Vehicle
 import com.hardik.taxinow.ui.adapter.VehicleListAdapter
 import com.hardik.taxinow.ui.adapter.VehicleSelectListener
-import com.hardik.taxinow.ui.model.Vehicle
 import com.hardik.taxinow.vm.VehicleListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -42,13 +44,15 @@ class VehicleListFragment : Fragment(), VehicleSelectListener {
     private fun addListeners() {
         binding.fabMap.setOnClickListener {
             lifecycleScope.launch {
-                val vehicles = viewModel.vehicle.value
-                vehicles?.let { vehicleList ->
-                    val direction =
-                        VehicleListFragmentDirections.actionVehicleListFragmentToVehicleOnMapsFragment(
-                            null, vehicleList.toTypedArray()
-                        )
-                    findNavController().navigate(direction)
+                val vehicles = viewModel.vehicleList.value
+                if (vehicles is ApiResult.Success) {
+                    vehicles.data?.let { vehicleList ->
+                        val direction =
+                            VehicleListFragmentDirections.actionVehicleListFragmentToVehicleOnMapsFragment(
+                                null, vehicleList.toTypedArray()
+                            )
+                        findNavController().navigate(direction)
+                    }
                 }
             }
         }
@@ -56,15 +60,24 @@ class VehicleListFragment : Fragment(), VehicleSelectListener {
 
     private fun addObserver() {
         lifecycleScope.launch {
-            viewModel.vehicle.collectLatest {
-                binding.progressBar.visibility = View.GONE
-                it?.let { vehicleList ->
-                    if (vehicleList.isNotEmpty()) {
-                        binding.fabMap.show()
-                        (binding.recyclerViewVehicle.adapter as VehicleListAdapter)
-                            .refresh(vehicleList)
-                    } else {
-                        binding.fabMap.hide()
+            viewModel.vehicleList.collectLatest { response ->
+                when (response) {
+                    is ApiResult.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is ApiResult.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        if (response.data.isNotEmpty()) {
+                            binding.fabMap.show()
+                            (binding.recyclerViewVehicle.adapter as VehicleListAdapter)
+                                .refresh(response.data)
+                        } else {
+                            binding.fabMap.hide()
+                        }
+                    }
+                    is ApiResult.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -76,13 +89,15 @@ class VehicleListFragment : Fragment(), VehicleSelectListener {
     }
 
     override fun onVehicleSelect(vehicle: Vehicle) {
-        val vehicles = viewModel.vehicle.value
-        vehicles?.let { vehicleList ->
-            val direction =
-                VehicleListFragmentDirections.actionVehicleListFragmentToVehicleOnMapsFragment(
-                    vehicle, vehicleList.toTypedArray()
-                )
-            findNavController().navigate(direction)
+        val apiResponse = viewModel.vehicleList.value
+        if (apiResponse is ApiResult.Success) {
+            apiResponse.data?.let { vehicleList ->
+                val direction =
+                    VehicleListFragmentDirections.actionVehicleListFragmentToVehicleOnMapsFragment(
+                        vehicle, vehicleList.toTypedArray()
+                    )
+                findNavController().navigate(direction)
+            }
         }
     }
 

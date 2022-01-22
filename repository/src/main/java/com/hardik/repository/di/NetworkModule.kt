@@ -1,6 +1,6 @@
 package com.hardik.repository.di
 
-import com.hardik.repository.Constant
+import com.hardik.common.model.Constant
 import com.hardik.repository.network.NetworkDataSource
 import dagger.Module
 import dagger.Provides

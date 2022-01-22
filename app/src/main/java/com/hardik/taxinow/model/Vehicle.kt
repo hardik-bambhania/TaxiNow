@@ -1,4 +1,4 @@
-package com.hardik.taxinow.ui.model
+package com.hardik.taxinow.model
 
 import android.os.Parcelable
 import com.hardik.repository.model.Coordinate

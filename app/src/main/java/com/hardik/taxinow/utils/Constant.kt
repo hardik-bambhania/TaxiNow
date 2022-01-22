@@ -1,4 +1,4 @@
-package com.hardik.taxinow.ui.utils
+package com.hardik.taxinow.utils
 
 import com.hardik.repository.model.CityBound
 

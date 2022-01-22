@@ -1,11 +1,11 @@
-package com.hardik.taxinow.ui.mapper
+package com.hardik.taxinow.mapper
 
 import android.location.Geocoder
 import com.google.android.gms.maps.model.LatLng
 import com.hardik.repository.model.POI
-import com.hardik.taxinow.ui.model.Vehicle
-import com.hardik.taxinow.ui.model.VehicleClass
-import com.hardik.taxinow.ui.utils.getAddress
+import com.hardik.taxinow.model.Vehicle
+import com.hardik.taxinow.model.VehicleClass
+import com.hardik.taxinow.utils.getAddress
 
 object Mapper {
     fun poiToVehicle(poi: POI, geocoder: Geocoder): Vehicle {

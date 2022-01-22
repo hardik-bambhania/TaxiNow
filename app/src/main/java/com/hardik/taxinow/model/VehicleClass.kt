@@ -1,4 +1,4 @@
-package com.hardik.taxinow.ui.model
+package com.hardik.taxinow.model
 
 import com.hardik.taxinow.R
 

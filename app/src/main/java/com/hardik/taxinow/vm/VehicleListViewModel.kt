@@ -3,15 +3,15 @@ package com.hardik.taxinow.vm
 import android.location.Geocoder
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hardik.common.model.ApiResult
 import com.hardik.repository.Repository
-import com.hardik.taxinow.ui.mapper.Mapper
-import com.hardik.taxinow.ui.utils.Constant
+import com.hardik.taxinow.mapper.Mapper
+import com.hardik.taxinow.model.Vehicle
+import com.hardik.taxinow.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +20,22 @@ class VehicleListViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
-    val vehicle = repository.getNearByVehicle(Constant.CITY_HAMBURG_BOUND).flowOn(Dispatchers.IO)
-        .mapLatest { it.poiList.map { poi -> Mapper.poiToVehicle(poi,geocoder) } }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    init {
+        getNearByVehicle()
+    }
+
+    private val _vehicle = MutableStateFlow<ApiResult<List<Vehicle>>>(ApiResult.Loading)
+    val vehicleList = _vehicle.asStateFlow()
+
+    private fun getNearByVehicle() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getNearByVehicle(Constant.CITY_HAMBURG_BOUND).flowOn(Dispatchers.IO)
+                .catch { _vehicle.emit(ApiResult.Error(it.message)) }
+                .collectLatest {
+                    val result = it.poiList.map { poi -> Mapper.poiToVehicle(poi, geocoder) }
+                    _vehicle.emit(ApiResult.Success(result))
+                }
+
+        }
+    }
 }

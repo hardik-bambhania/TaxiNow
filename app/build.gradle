@@ -71,6 +71,9 @@ dependencies {
     //lottie
     implementation "com.airbnb.android:lottie:3.4.0"
 
+    //splashscreen
+    implementation "androidx.core:core-splashscreen:1.0.0-beta01"
+
     testImplementation 'junit:junit:4.13.2'
     testImplementation "io.mockk:mockk:1.12.2"
     testImplementation "io.mockk:mockk-agent-jvm:1.12.2"

@@ -1,10 +1,13 @@
 package com.hardik.repository.di
 
+import android.content.Context
 import com.hardik.common.model.Constant
 import com.hardik.repository.network.NetworkDataSource
+import com.hardik.repository.network.interceptor.NetworkConnectionInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -30,10 +33,12 @@ object NetworkModule {
     @Singleton
     @Provides
     fun providesHttpClient(
-        httpLoggingInterceptor: HttpLoggingInterceptor
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        @ApplicationContext appContext: Context
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(NetworkConnectionInterceptor(appContext))
             .build()
     }
 

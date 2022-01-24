@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.hardik.common.model.ApiResult
 import com.hardik.taxinow.databinding.FragmentVehicleListBinding
@@ -73,26 +75,29 @@ class VehicleListFragment : Fragment(), VehicleSelectListener {
      */
     private fun addObserver() {
         lifecycleScope.launch {
-            viewModel.vehicleList.collectLatest { response ->
-                when (response) {
-                    is ApiResult.Loading -> {
-                        binding.progressBar.visible()
-                    }
-                    is ApiResult.Success -> {
-                        binding.progressBar.gone()
-                        if (response.data.isNotEmpty()) {
-                            binding.emptyView.gone()
-                            binding.fabMap.show()
-                            (binding.recyclerViewVehicle.adapter as VehicleListAdapter)
-                                .refresh(response.data)
-                        } else {
-                            binding.fabMap.hide()
-                            binding.emptyView.visible()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.vehicleList.collectLatest { response ->
+                    when (response) {
+                        is ApiResult.Loading -> {
+                            binding.progressBar.visible()
                         }
-                    }
-                    is ApiResult.Error -> {
-                        binding.progressBar.gone()
-                        Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG).show()
+                        is ApiResult.Success -> {
+                            binding.progressBar.gone()
+                            if (response.data.isNotEmpty()) {
+                                binding.emptyView.gone()
+                                binding.fabMap.show()
+                                (binding.recyclerViewVehicle.adapter as VehicleListAdapter)
+                                    .refresh(response.data)
+                            } else {
+                                binding.fabMap.hide()
+                                binding.emptyView.visible()
+                            }
+                        }
+                        is ApiResult.Error -> {
+                            binding.progressBar.gone()
+                            Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG)
+                                .show()
+                        }
                     }
                 }
             }

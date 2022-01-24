@@ -17,10 +17,10 @@ Taxi Now is an android app to view near by available Taxi.User can also view ava
 ## Screenshots
 
 <p float="left">
-  <img src="./screenshots/dark_trending.png" width="240" />
-  <img src="./screenshots/dark_favorite.png" width="240" /> 
-  <img src="./screenshots/light_trending.png" width="240" /> 
-  <img src="./screenshots/light_favorite.png" width="240" /> 
+  <img src="./screenshots/dark_vehicle_list.png" width="240" />
+  <img src="./screenshots/dark_vehicle_on_map.png" width="240" />
+  <img src="./screenshots/light_vehicle_list.png" width="240" />
+  <img src="./screenshots/light_vehicle_on_map.png" width="240" />
 </p>
 
 ## Architecture

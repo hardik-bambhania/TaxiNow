@@ -83,5 +83,7 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version_coroutines_test"
 
     androidTestImplementation "androidx.test.ext:junit:$version_ext_junit"
-    androidTestImplementation "androidx.test.espresso:espresso-core:version_espresso"
+    androidTestImplementation "androidx.test:rules:$version_test_rule"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$version_espresso"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$version_espresso"
 }

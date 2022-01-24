@@ -59,7 +59,4 @@ dependencies {
     testImplementation "io.mockk:mockk:$version_mockk"
     testImplementation "io.mockk:mockk-agent-jvm:$version_mockk"
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:$version_kotlin_reflect"
-
-    androidTestImplementation "androidx.test.ext:junit:$version_ext_junit"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$version_espresso"
 }

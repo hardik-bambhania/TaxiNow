@@ -81,11 +81,13 @@ class VehicleListFragment : Fragment(), VehicleSelectListener {
                     is ApiResult.Success -> {
                         binding.progressBar.gone()
                         if (response.data.isNotEmpty()) {
+                            binding.emptyView.gone()
                             binding.fabMap.show()
                             (binding.recyclerViewVehicle.adapter as VehicleListAdapter)
                                 .refresh(response.data)
                         } else {
                             binding.fabMap.hide()
+                            binding.emptyView.visible()
                         }
                     }
                     is ApiResult.Error -> {

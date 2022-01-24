@@ -57,6 +57,8 @@ class VehicleOnMapsFragment : Fragment(), OnMapReadyCallback {
                         vehicle.coordinate.longitude.toStringWithFourPrecision()
                     )
                 )
+                .flat(true)
+                .rotation(vehicle.heading)
             if (vehicle.fleetType == FleetType.TAXI) {
                 marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_taxi))
             } else {

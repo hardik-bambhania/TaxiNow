@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Hardik/Projects/Personal/TaxiNow/app/src/main/res/drawable/ic_location.xml" value="0.1" />
         <entry key="..\:/Hardik/Projects/Personal/TaxiNow/app/src/main/res/drawable/shape_stadium.xml" value="0.1824074074074074" />
         <entry key="..\:/Hardik/Projects/Personal/TaxiNow/app/src/main/res/layout/activity_main.xml" value="0.2312820512820513" />
         <entry key="..\:/Hardik/Projects/Personal/TaxiNow/app/src/main/res/layout/fragment_vehicle_list.xml" value="0.264" />

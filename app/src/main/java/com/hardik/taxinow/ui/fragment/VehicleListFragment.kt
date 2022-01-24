@@ -47,7 +47,7 @@ class VehicleListFragment : Fragment(), VehicleSelectListener {
      * Initialize UI
      */
     private fun initUI() {
-        binding.recyclerViewVehicle.adapter = VehicleListAdapter(emptyList(), this)
+        binding.recyclerViewVehicle.adapter = VehicleListAdapter(requireContext(),emptyList(), this)
     }
 
     /**

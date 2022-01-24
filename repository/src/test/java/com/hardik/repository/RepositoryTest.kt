@@ -17,7 +17,7 @@ class RepositoryTest {
     @MockK
     lateinit var networkDataSource: NetworkDataSource
 
-    lateinit var repository: Repository
+    private lateinit var repository: Repository
 
     @Before
     fun setUp() {

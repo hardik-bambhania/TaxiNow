@@ -18,10 +18,11 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginHorizontal="8dp"
+            android:contentDescription="@string/vehicle_class"
+            android:src="@drawable/ic_sedan"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_sedan" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/txt_vehicle_id"
@@ -43,7 +44,7 @@
             android:layout_marginVertical="4dp"
             android:textAppearance="?textAppearanceCaption"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/chip_vehicle_type"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_vehicle_class"
             app:layout_constraintTop_toBottomOf="@id/txt_vehicle_id"
             tools:text="53.4884,9.7884" />

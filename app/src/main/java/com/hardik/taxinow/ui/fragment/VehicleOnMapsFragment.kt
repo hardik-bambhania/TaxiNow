@@ -14,9 +14,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
+import com.hardik.repository.model.FleetType
 import com.hardik.taxinow.R
 import com.hardik.taxinow.databinding.FragmentVehicleOnMapsBinding
 import com.hardik.taxinow.utils.Constant
+import com.hardik.taxinow.utils.toStringWithFourPrecision
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,11 +47,23 @@ class VehicleOnMapsFragment : Fragment(), OnMapReadyCallback {
         args.vehicleList.forEach { vehicle ->
             val latLng = LatLng(vehicle.coordinate.latitude, vehicle.coordinate.longitude)
             val markerTitle = "${Constant.CITY_HAMBURG_CODE}-${vehicle.id.toString().dropLast(2)}"
-            googleMap.addMarker(
-                MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_taxi))
-                    .position(latLng).title(markerTitle).snippet(vehicle.address)
-            )
+            val marker = MarkerOptions()
+                .position(latLng)
+                .title(markerTitle.plus("(${vehicle.fleetType.name}-${vehicle.vehicleClass.name})"))
+                .snippet(
+                    getString(
+                        R.string.location,
+                        vehicle.coordinate.latitude.toStringWithFourPrecision(),
+                        vehicle.coordinate.longitude.toStringWithFourPrecision()
+                    )
+                )
+            if (vehicle.fleetType == FleetType.TAXI) {
+                marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_taxi))
+            } else {
+                marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_pooling))
+            }
+
+            googleMap.addMarker(marker)
             latLngBounds.include(latLng)
         }
 

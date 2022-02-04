@@ -23,4 +23,4 @@ jobs:
       run: chmod +x gradlew
       
     - name: Clean with Gradle
-      run: ./gradlew clean
+      run: ./gradlew clean --stacktrace

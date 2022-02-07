@@ -1,3 +1,5 @@
+[![Build](https://github.com/hardik-bambhania/TaxiNow/actions/workflows/android.yml/badge.svg)](https://github.com/hardik-bambhania/TaxiNow/actions/workflows/android.yml)
+
 Taxi Now
 ======================
 

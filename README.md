@@ -3,18 +3,34 @@
 Taxi Now
 ======================
 
-Taxi Now is an android app to view near by available Taxi.User can also view available Taxis on Map.
-
-## Features
-* View List of available taxi in Hamburg City.
-* View available taxi in Hamburg City on Google Map.
-* Light and Dark mode support
+Taxi Now is an android app to view near by available Taxi.
 
 
-## Test cases covered
-* Added JUnit test cases for view models.
-* Added JUnit test cases for repository layer.
-* Added Espresso instrumentation test cases for UI module.
+## Functional Requirment
+* User can view list of available taxi in Hamburg City.
+* User can view available taxi in Hamburg City on Google Map.
+
+
+## Non-Functional Requirment
+* Ligh and Dark model support.
+* Unit test cases.
+* UI Authomation test cases.
+* CI/CD to build and release new binary.
+
+## Assumptions
+* This application will support only ONLINE mode.
+* No data will be store in device.
+
+## Client-Server Communication
+* Mobile application will communicate with backend server through REST Http APIs.
+
+### APIs
+| API Name         | Endpoint                                                                                                   | Type  |
+| ---------------- |:----------------------------------------------------------------------------------------------------------:| -----:|
+| Get Vehicles     | https://fake-poi-api.mytaxi.com/?p1Lat={Latitude1}&p1Lon={Longitude1}&p2Lat={Latitude2}&p2Lon={Longitude2} | GET   |
+
+## Data Models
+
 
 ## Screenshots
 
